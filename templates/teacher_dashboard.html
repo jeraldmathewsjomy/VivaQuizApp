@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section>
+    <h2>Teacher Dashboard</h2>
+    <a href="{{ url_for('create_quiz') }}" class="button">Create Quiz</a>
+    <h3>Your Quizzes</h3>
+    <ul>
+        {% for quiz in quizzes %}
+        <li>
+            Quiz ID: {{ quiz.quiz_id }}
+            <a href="{{ url_for('teacher_performance_graph', quiz_id=quiz.quiz_id) }}">View Performance</a>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section>
+    <h2>Student Dashboard</h2>
+    <a href="{{ url_for('attempt_quiz') }}" class="button">Attempt Quiz</a>
+    <h3>Your Results</h3>
+    <ul>
+        {% for result in results %}
+        <li>
+            Quiz ID: {{ result.quiz_id }} - Score: {{ result.score }}
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('student_performance_graph') }}">View Performance Graph</a>
+</section>
+{% endblock %}

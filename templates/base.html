@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viva Quiz App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<header>
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.is_authenticated %}
+            {% if current_user.role == 'teacher' %}
+                <a href="{{ url_for('teacher_dashboard') }}">Dashboard</a>
+            {% elif current_user.role == 'student' %}
+                <a href="{{ url_for('student_dashboard') }}">Dashboard</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('signup') }}">Signup</a>
+        {% endif %}
+    </nav>
+</header>
+<main>
+    {% block content %}{% endblock %}
+</main>
+<footer>
+    <p>&copy; 2024 Viva Quiz App. All rights reserved.</p>
+</footer>
+</body>
+</html>
