@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    ```html
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Quiz</title>
@@ -12,7 +11,10 @@
     <form method="POST">
         {% for question in quiz %}
             <p>{{ question['question'] }}</p>
-            <input type="text" name="answer_{{ loop.index }}" placeholder="Your answer">
+            <input type="radio" name="answer_{{ loop.index }}" value="A"> {{ question['options']['A'] }}<br>
+            <input type="radio" name="answer_{{ loop.index }}" value="B"> {{ question['options']['B'] }}<br>
+            <input type="radio" name="answer_{{ loop.index }}" value="C"> {{ question['options']['C'] }}<br>
+            <input type="radio" name="answer_{{ loop.index }}" value="D"> {{ question['options']['D'] }}<br>
         {% endfor %}
         <button type="submit">Submit Answers</button>
     </form>

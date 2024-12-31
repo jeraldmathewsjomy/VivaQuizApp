@@ -9,6 +9,7 @@
 <body>
     <h1>Student Dashboard</h1>
     <p>Welcome, {{ current_user.username }}!</p>
+    <button onclick="window.location.href='{{ url_for('take_quiz') }}'">Attempt Quiz</button>
     <a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>

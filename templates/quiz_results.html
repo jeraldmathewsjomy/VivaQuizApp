@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Quiz Results</title>
+</head>
+<body>
+    <h1>Quiz Results</h1>
+    <h2>Your Score: {{ total_points }} / {{ questions|length }}</h2>
+    <h2>Your Answers:</h2>
+    <ul>
+        {% for question in questions %}
+            <li>
+                <strong>{{ question.question }}</strong><br>
+                Your Answer: {{ user_answers[loop.index0] }} - Correct Answer: {{ question.correct_answer }}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('student_dashboard') }}">Return to Dashboard</a>
+</body>
+</html>

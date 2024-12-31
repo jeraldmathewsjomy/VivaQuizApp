@@ -5,12 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Teacher Dashboard</title>
+    <script>
+        function showQuestionInputs() {
+            const numQuestions = document.getElementById('numQuestions').value;
+            const questionsContainer = document.getElementById('questionsContainer');
+            questionsContainer.innerHTML = ''; // Clear previous inputs
+
+            for (let i = 0; i < numQuestions; i++) {
+                questionsContainer.innerHTML += `
+                    <div>
+                        <h3>Question ${i + 1}</h3>
+                        <input type="text" name="question_${i}" placeholder="Question" required>
+                        <input type="text" name="option_a_${i}" placeholder="Option A" required>
+                        <input type="text" name="option_b_${i}" placeholder="Option B" required>
+                        <input type="text" name="option_c_${i}" placeholder="Option C" required>
+                        <input type="text" name="option_d_${i}" placeholder="Option D" required>
+                        <select name="correct_answer_${i}" required>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+                `;
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>Teacher Dashboard</h1>
 
     <button onclick="document.getElementById('createQuizForm').style.display='block'">Create Quiz</button>
-    <button onclick="window.location.href='{{ url_for('view_quizzes') }}'">View Quiz</button> <!-- New button -->
+    <button onclick="window.location.href='{{ url_for('view_quizzes') }}'">View Quiz</button>
 
     <div id="createQuizForm" style="display:none;">
         <h2>Create Quiz</h2>
