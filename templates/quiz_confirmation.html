@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Confirmation</title>
+</head>
+<body>
+    <h1>Quiz Created Successfully!</h1>
+    <p>Your quiz has been created with the following ID:</p>
+    <h2>{{ quiz_id }}</h2>
+    <a href="{{ url_for('teacher_dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

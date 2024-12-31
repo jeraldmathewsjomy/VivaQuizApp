@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Student Dashboard</title>
+    <title>Results</title>
 </head>
 <body>
-    <h1>Student Dashboard</h1>
-    <p>Welcome, {{ current_user.username }}!</p>
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <h1>Results</h1>
+    <p>Your results will be displayed here.</p>
+    <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
 </body>
 </html>

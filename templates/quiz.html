@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    ```html
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    <form method="POST">
+        {% for question in quiz %}
+            <p>{{ question['question'] }}</p>
+            <input type="text" name="answer_{{ loop.index }}" placeholder="Your answer">
+        {% endfor %}
+        <button type="submit">Submit Answers</button>
+    </form>
+    <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+</body>
+</html>
