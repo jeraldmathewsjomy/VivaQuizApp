@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Previous Quiz Attempts</title>
+</head>
+<body>
+    <h1>Previous Quiz Attempts</h1>
+    <ul>
+        {% for attempt in attempts %}
+            <li>
+                Quiz ID: {{ attempt.quiz_id }} - Score: {{ attempt.total_points }}
+                <a href="{{ url_for('quiz_result', attempt_id=attempt.id) }}">View Result</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('student_dashboard') }}">Return to Dashboard</a>
+</body>
+</html>

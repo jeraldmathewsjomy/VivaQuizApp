@@ -4,20 +4,215 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
     <title>Quiz</title>
 </head>
 <body>
     <h1>Quiz</h1>
-    <form method="POST">
-        {% for question in quiz %}
-            <p>{{ question['question'] }}</p>
-            <input type="radio" name="answer_{{ loop.index }}" value="A"> {{ question['options']['A'] }}<br>
-            <input type="radio" name="answer_{{ loop.index }}" value="B"> {{ question['options']['B'] }}<br>
-            <input type="radio" name="answer_{{ loop.index }}" value="C"> {{ question['options']['C'] }}<br>
-            <input type="radio" name="answer_{{ loop.index }}" value="D"> {{ question['options']['D'] }}<br>
-        {% endfor %}
-        <button type="submit">Submit Answers</button>
+
+    <form method="POST" id="quiz-form">
+        {% if current_index < total_questions %}
+            <p id="question-number">{{ current_index + 1 }} of {{ total_questions }}</p>
+        {% else %}
+            <script>
+                window.location.href = "{{ url_for('quiz_result_summary', quiz_id=quiz_id) }}";
+            </script>
+        {% endif %}
+    
+        <p id="question-text">{{ question['question'] }}</p>
+        
+        <input type="radio" id="optionA" name="answer" value="A" required> 
+        <span class="option-text">{{ question['options']['A'] }}</span><br>
+
+        <input type="radio" id="optionB" name="answer" value="B"> 
+        <span class="option-text">{{ question['options']['B'] }}</span><br>
+
+        <input type="radio" id="optionC" name="answer" value="C"> 
+        <span class="option-text">{{ question['options']['C'] }}</span><br>
+
+        <input type="radio" id="optionD" name="answer" value="D"> 
+        <span class="option-text">{{ question['options']['D'] }}</span><br>
+        
+        {% if current_index < total_questions - 1 %}
+            <button type="submit" name="action" value="next">Next</button>
+        {% else %}
+            <button type="submit" name="action" value="submit">Submit</button>
+        {% endif %}
     </form>
+
+    <button onclick="readQuestionAndOptions()">🔊 Read Question & Options</button>
+
     <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+
+    <script>
+        let recognition; // Declare a global variable to track the speech recognition instance
+    
+        function readText(text) {
+            const audio = new Audio(`/speak/${encodeURIComponent(text)}`);
+            return new Promise(resolve => {
+                audio.onended = resolve;
+                audio.play();
+            });
+        }
+    
+        async function readQuestionAndOptions() {
+            if (recognition) {
+                recognition.abort(); // Stop any ongoing speech recognition
+            }
+    
+            let questionNumber = document.getElementById("question-number").innerText;
+            let question = document.getElementById("question-text").innerText;
+            let options = document.querySelectorAll(".option-text");
+    
+            await readText("Question " + questionNumber);
+            await readText("Question: " + question);
+    
+            for (let i = 0; i < options.length; i++) {
+                let optionText = String.fromCharCode(65 + i) + ": " + options[i].innerText;
+                await readText(optionText);
+            }
+    
+            await readText("Kindly provide your answer.");
+            startListening();
+        }
+    
+        function startListening() {
+            if (recognition) {
+                recognition.abort(); // Stop any ongoing recognition to prevent multiple instances
+            }
+    
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+    
+            recognition.onstart = function () {
+                console.log("Listening for answer...");
+            };
+    
+            recognition.onresult = async function (event) {
+                let spokenText = event.results[0][0].transcript.trim().toLowerCase();
+                console.log("Recognized Text:", spokenText);
+    
+                let options = {
+                    "A": document.querySelector("#optionA + .option-text")?.textContent.trim().toLowerCase() || "",
+                    "B": document.querySelector("#optionB + .option-text")?.textContent.trim().toLowerCase() || "",
+                    "C": document.querySelector("#optionC + .option-text")?.textContent.trim().toLowerCase() || "",
+                    "D": document.querySelector("#optionD + .option-text")?.textContent.trim().toLowerCase() || ""
+                };
+    
+                console.log("Options available:", options);
+    
+                let selectedOption = null;
+    
+                for (let key in options) {
+                    if (spokenText === options[key] || spokenText === key.toLowerCase()) {  
+                        selectedOption = key;
+                        break;
+                    }
+                }
+    
+                if (selectedOption) {
+                    console.log(`Matched with Option ${selectedOption}`);
+                    await readText(`You have selected option ${selectedOption}. If you confirm the answer, say yes please. If not, say no please.`);
+                    waitForConfirmation(selectedOption);
+                } else {
+                    await readText("Invalid answer! Please say a valid option.");
+                    startListening();
+                }
+            };
+    
+            recognition.onerror = function (event) {
+                console.error("Speech Recognition Error:", event.error);
+                readText("Speech recognition error. Please try again.");
+                startListening();
+            };
+    
+            recognition.onend = function () {
+                console.log("Speech Recognition Ended.");
+            };
+    
+            recognition.start();
+        }
+    
+        function waitForConfirmation(selectedOption) {
+            if (recognition) {
+                recognition.abort(); // Stop any ongoing recognition
+            }
+        
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+        
+            let heardResponse = false; // Track if a valid response is heard
+        
+            recognition.onstart = function () {
+                console.log("Listening for confirmation...");
+            };
+        
+            recognition.onresult = async function(event) {
+                let spokenText = event.results[0][0].transcript.trim().toLowerCase();
+                console.log("User Confirmation:", spokenText);
+        
+                if (spokenText.startsWith("yes")) { // ✅ Works for "yes" & "yes please"
+                    heardResponse = true;
+                    document.getElementById(`option${selectedOption}`).checked = true;
+                    console.log(`Option ${selectedOption} marked.`);
+                    
+                    await readText("Answer confirmed. Moving to the next question.");
+        
+                    setTimeout(() => {
+                        let progressInput = document.createElement("input");
+                        progressInput.type = "hidden";
+                        progressInput.name = "action";
+                        progressInput.value = "next"; 
+                        document.getElementById("quiz-form").appendChild(progressInput);
+        
+                        document.getElementById("quiz-form").submit();
+                    }, 2000);
+        
+                } else if (spokenText.startsWith("no")) { 
+                    heardResponse = true; // ✅ Stop retry loop
+                    console.log("Repeating question...");
+                    await readText("Repeating the question. Please listen carefully.");
+        
+                    setTimeout(() => {
+                        readQuestionAndOptions();
+                    }, 2000);
+                }
+            };
+        
+            recognition.onerror = function (event) {
+                console.error("Speech Recognition Error:", event.error);
+                    readText("I didn't hear you, please repeat the response.");
+                    
+
+            };
+        
+            recognition.onend = function () {
+                console.log("Speech Recognition Ended.");
+                if (!heardResponse) { 
+                    console.log("No valid response heard, prompting again...");
+                    setTimeout(() => {
+                        waitForConfirmation(selectedOption);
+                    }, 2000);
+                }
+            };
+        
+            recognition.start();
+        }
+        
+        
+        
+        
+        window.onload = function() {
+            readQuestionAndOptions();
+        };
+    </script>
+    
+    
+    
+
 </body>
 </html>

@@ -3,49 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>View Quizzes</title>
 </head>
 <body>
     <h1>Quizzes</h1>
-    <table border="1">
-        <tr>
-            <th>Quiz ID</th>
-            <th>Questions</th>
-            <th>Options</th>
-            <th>Correct Answer</th> <!-- New column for correct answer -->
-        </tr>
+    <ul>
         {% for quiz in quizzes %}
-        <tr>
-            <td>{{ quiz.quiz_id }}</td>
-            <td>
-                <ul>
-                    {% for question in quiz.questions %}
-                        <li>{{ question.question }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    {% for question in quiz.questions %}
-                        <li>
-                            A: {{ question.options.A }}<br>
-                            B: {{ question.options.B }}<br>
-                            C: {{ question.options.C }}<br>
-                            D: {{ question.options.D }}<br>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    {% for question in quiz.questions %}
-                        <li>{{ question.correct_answer }}</li> <!-- Display the correct answer -->
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
+            <li>
+                Quiz ID: {{ quiz.quiz_id }}
+                <a href="{{ url_for('quiz', quiz_id=quiz.quiz_id) }}">View Quiz</a>
+            </li>
         {% endfor %}
-    </table>
+    </ul>
     <a href="{{ url_for('teacher_dashboard') }}">Back to Dashboard</a>
 </body>
 </html>

@@ -1,0 +1,34 @@
+Folder PATH listing for volume Local Disk
+Volume serial number is FC16-736C
+D:.
+|   app.py
+|   audio_utils.py
+|   database.py
+|   project_structure.txt
+|   requirements.txt
+|   
++---instance
+|       vivaquiz.db
+|       viva_quiz.db
+|       
++---static
+|       style.css
+|       
++---templates
+|       index.html
+|       login.html
+|       previous_attempts.html
+|       quiz.html
+|       quiz_confirmation.html
+|       quiz_results.html
+|       results.html
+|       signup.html
+|       student_dashboard.html
+|       take_quiz.html
+|       teacher_dashboard.html
+|       view_quizzes.html
+|       
+\---__pycache__
+        audio_utils.cpython-311.pyc
+        database.cpython-311.pyc
+        
