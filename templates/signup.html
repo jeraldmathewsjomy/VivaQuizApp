@@ -3,23 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - VivaQuizApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Sign Up</title>
 </head>
 <body>
-    <h1>Sign Up</h1>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-    <form method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <select name="role" required>
-            <option value="teacher">Teacher</option>
-            <option value="student">Student</option>
-        </select>
-        <button type="submit">Sign Up</button>
-    </form>
-    <a href="{{ url_for('login') }}">Already have an account? Login</a>
+    <!-- Full-Page Background Box -->
+    <div class="background-box">
+        <div class="container">
+            <!-- Left Section -->
+            <div class="left-panel">
+                <div class="branding">VivaQuizApp</div>
+                <div class="loginh"><h2>Sign Up</h2></div>
+                
+                {% if error %}
+                    <p class="error-message">{{ error }}</p>
+                {% endif %}
+
+                <form method="POST" class="form-container">
+                    <div class="input-container">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required class="input-field">
+                    </div>
+
+                    <div class="input-container">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required class="input-field">
+                    </div>
+
+                    <div class="input-container dropdown">
+                        <label for="role">Select Role</label>
+                        <select id="role" name="role" required class="input-field">
+                            <option value="teacher">Teacher</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    
+                    
+
+                    <button type="submit" class="btn signup-btn">Sign Up</button>
+                </form>
+
+
+                <p class="small-text">Already have an account? <a href="{{ url_for('login') }}">Login</a>&nbsp;&nbsp;&nbsp;&nbsp; Not Sure? <a href="{{ url_for('index') }}">Homepage</a></p>
+            </div>
+
+            <!-- Right Section -->
+            <div class="right-panel"></div>
+        </div>
+    </div>
 </body>
 </html>

@@ -7,44 +7,175 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
     <title>Quiz</title>
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(to right, #BCAD9E, #EDECE6); /* Ash-like gradient */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Layout */
+        .container {
+            display: flex;
+            width: 97%;
+            height: 97%;
+            position:center
+        }
+        
+        /* Left Pane */
+        .left-pane {
+            width: 30%;
+            background: url("https://imgs.search.brave.com/cnUel0cujoOg-pfBbOMlt2NEiq44lCCC40HNZenrJcw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wdWIt/c3RhdGljLmZvdG9y/LmNvbS9hc3NldHMv/YmcvOGFjNGU4NTgt/MmE5NC00ODA4LWFm/OTgtNmVjMTM2Zjc5/ZTk5LnBuZw") no-repeat center center/cover;
+            
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            border-top-left-radius: 30px; /* Curved corners on top-left */
+            border-bottom-left-radius: 30px; /* Curved corners on bottom-left */
+            height: 100%;
+        }
+        
+        .logi {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color:black;
+        }
+        
+        .question-counter {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        
+        
+        .quiz-btn:hover {
+            background: #ffcc00;
+        }
+        
+        /* Right Pane */
+        .right-pane {
+            width: 70%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: white;
+            border: 2px solid #ffcc00;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+            border-top-right-radius: 30px; /* Curved corners on top-right */
+            border-bottom-right-radius: 30px; /* Curved corners on bottom-right */
+            height: 100%;
+        }
+        
+        .question-box {
+            font-family: "Poppins", sans-serif;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .option {
+            font-family: "Poppins", sans-serif;
+            background: white;
+            border: 2px solid #ffcc00;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            font-size: 18px;
+        }
+        
+        .option:hover {
+            background-color: #ffcc00;
+            color: white;
+        }
+        
+    </style>
 </head>
 <body>
-    <h1>Quiz</h1>
-
-    <form method="POST" id="quiz-form">
-        {% if current_index < total_questions %}
-            <p id="question-number">{{ current_index + 1 }} of {{ total_questions }}</p>
-        {% else %}
-            <script>
-                window.location.href = "{{ url_for('quiz_result_summary', quiz_id=quiz_id) }}";
-            </script>
-        {% endif %}
-    
-        <p id="question-text">{{ question['question'] }}</p>
+    <div class="container">
         
-        <input type="radio" id="optionA" name="answer" value="A" required> 
-        <span class="option-text">{{ question['options']['A'] }}</span><br>
+        <!-- Left Pane -->
+        <div class="left-pane">
+            <div class="logi"><h1>Quiz</h1></div>
+            <p class="question-counter" id="question-number">
+                {% if current_index < total_questions %}
+                    {{ current_index + 1 }} of {{ total_questions }}
+                {% else %}
+                    <script>
+                        window.location.href = "{{ url_for('quiz_result_summary', quiz_id=quiz_id) }}";
+                    </script>
+                {% endif %}
+            </p>
+            
+            <button class="quiz-btn" onclick="readQuestionAndOptions()">🔊 Read Question & Options</button>
+            <a href="{{ url_for('student_dashboard') }}" class="quiz-btn">Back to Dashboard</a>
+        </div>
 
-        <input type="radio" id="optionB" name="answer" value="B"> 
-        <span class="option-text">{{ question['options']['B'] }}</span><br>
+        <!-- Right Pane -->
+        <div class="right-pane">
+            <form method="POST" id="quiz-form">
+                <p class="question-box" id="question-text">{{ question['question'] }}</p>
 
-        <input type="radio" id="optionC" name="answer" value="C"> 
-        <span class="option-text">{{ question['options']['C'] }}</span><br>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" id="optionA" name="answer" value="A" required> 
+                        <span class="option-text">{{ question['options']['A'] }}</span>
+                    </label>
 
-        <input type="radio" id="optionD" name="answer" value="D"> 
-        <span class="option-text">{{ question['options']['D'] }}</span><br>
-        
-        {% if current_index < total_questions - 1 %}
-            <button type="submit" name="action" value="next">Next</button>
-        {% else %}
-            <button type="submit" name="action" value="submit">Submit</button>
-        {% endif %}
-    </form>
+                    <label class="option">
+                        <input type="radio" id="optionB" name="answer" value="B"> 
+                        <span class="option-text">{{ question['options']['B'] }}</span>
+                    </label>
 
-    <button onclick="readQuestionAndOptions()">🔊 Read Question & Options</button>
+                    <label class="option">
+                        <input type="radio" id="optionC" name="answer" value="C"> 
+                        <span class="option-text">{{ question['options']['C'] }}</span>
+                    </label>
 
-    <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+                    <label class="option">
+                        <input type="radio" id="optionD" name="answer" value="D"> 
+                        <span class="option-text">{{ question['options']['D'] }}</span>
+                    </label>
+                </div>
 
+                {% if current_index < total_questions - 1 %}
+                    <button type="submit" class="quiz-btn" name="action" value="next">Next</button>
+                {% else %}
+                    <button type="submit" class="quiz-btn" name="action" value="submit">Submit</button>
+                {% endif %}
+            </form>
+        </div>
+
+    </div>
     <script>
         let recognition; // Declare a global variable to track the speech recognition instance
     
@@ -93,34 +224,37 @@
             recognition.onresult = async function (event) {
                 let spokenText = event.results[0][0].transcript.trim().toLowerCase();
                 console.log("Recognized Text:", spokenText);
-    
+            
                 let options = {
                     "A": document.querySelector("#optionA + .option-text")?.textContent.trim().toLowerCase() || "",
                     "B": document.querySelector("#optionB + .option-text")?.textContent.trim().toLowerCase() || "",
                     "C": document.querySelector("#optionC + .option-text")?.textContent.trim().toLowerCase() || "",
                     "D": document.querySelector("#optionD + .option-text")?.textContent.trim().toLowerCase() || ""
                 };
-    
+            
                 console.log("Options available:", options);
-    
+            
                 let selectedOption = null;
-    
+                let selectedText = "";
+            
                 for (let key in options) {
                     if (spokenText === options[key] || spokenText === key.toLowerCase()) {  
                         selectedOption = key;
+                        selectedText = options[key]; // Store the selected option's text
                         break;
                     }
                 }
-    
+            
                 if (selectedOption) {
-                    console.log(`Matched with Option ${selectedOption}`);
-                    await readText(`You have selected option ${selectedOption}. If you confirm the answer, say yes please. If not, say no please.`);
+                    console.log(`Matched with Option ${selectedOption}: ${selectedText}`);
+                    await readText(`You have selected option ${selectedOption}, which is ${selectedText}. If you confirm the answer, say yes please. If not, say no please.`);
                     waitForConfirmation(selectedOption);
                 } else {
                     await readText("Invalid answer! Please say a valid option.");
                     startListening();
                 }
             };
+            
     
             recognition.onerror = function (event) {
                 console.error("Speech Recognition Error:", event.error);
@@ -157,18 +291,26 @@
         
                 if (spokenText.startsWith("yes")) { // ✅ Works for "yes" & "yes please"
                     heardResponse = true;
-                    document.getElementById(`option${selectedOption}`).checked = true;
-                    console.log(`Option ${selectedOption} marked.`);
-                    
+        
+                    // Mark the selected option in the form
+                    document.getElementById(`option${selectedOption}`).checked = true; // Mark the answer
+                    console.log(`Option ${selectedOption} marked for submission.`);
+        
                     await readText("Answer confirmed. Moving to the next question.");
         
                     setTimeout(() => {
+                        // Log the selected value for debugging
+                        const selectedValue = document.querySelector('input[name="answer"]:checked');
+                        console.log(`Selected value before submission: ${selectedValue ? selectedValue.value : 'None'}`);
+                        
+                        // Add a hidden input to specify the action
                         let progressInput = document.createElement("input");
                         progressInput.type = "hidden";
                         progressInput.name = "action";
                         progressInput.value = "next"; 
                         document.getElementById("quiz-form").appendChild(progressInput);
         
+                        // Submit the form
                         document.getElementById("quiz-form").submit();
                     }, 2000);
         
@@ -185,9 +327,7 @@
         
             recognition.onerror = function (event) {
                 console.error("Speech Recognition Error:", event.error);
-                    readText("I didn't hear you, please repeat the response.");
-                    
-
+                readText("I didn't hear you, please repeat the response.");
             };
         
             recognition.onend = function () {
@@ -202,17 +342,11 @@
         
             recognition.start();
         }
-        
-        
-        
+              
         
         window.onload = function() {
             readQuestionAndOptions();
         };
     </script>
-    
-    
-    
-
 </body>
 </html>

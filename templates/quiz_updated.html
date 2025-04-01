@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <title>Quiz</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #BCAD9E, #EDECE6);
+        }
+
+        .container {
+            display: flex;
+            width: 90%;
+            height: 98%;
+            background: transparent;
+        }
+
+        .left-panel {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: transparent;
+            overflow-y: auto;
+        }
+
+        .question-box {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .unattended {
+            background-color: rgba(255, 255, 255, 0.5); /* Transparent */
+        }
+
+        .not-marked {
+            background-color: red; /* Attended but not marked */
+        }
+
+        .marked {
+            background-color: green; /* Attended and marked */
+        }
+
+        .right-panel {
+            flex: 1;
+            background: url("https://imgs.search.brave.com/Uup26J925pQkrlpB2XGeSEkKQUiqX_oY2fInUwN4w44/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jNC53/YWxscGFwZXJmbGFy/ZS5jb20vd2FsbHBh/cGVyLzUyNy85NzYv/MzUvZXhhbS1zdHVk/eWluZy13YWxscGFw/ZXItcHJldmlldy5q/cGc") no-repeat center center/cover;
+            border-left: 2px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #ffd700;
+            color: black;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz</h1>
+    <div class="container">
+        <div class="left-panel">
+            <!-- Question boxes will be dynamically generated here -->
+            {% for i in range(total_questions) %}
+                <div class="question-box {{ 'unattended' if i not in attended_questions else 'not-marked' if i in not_marked_questions else 'marked' }}">
+                    {{ i + 1 }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="right-panel">
+            <form method="POST" id="quiz-form">
+                {% if current_index < total_questions %}
+                    <p id="question-number">{{ current_index + 1 }} of {{ total_questions }}</p>
+                {% else %}
+                    <script>
+                        window.location.href = "{{ url_for('quiz_result_summary', quiz_id=quiz_id) }}";
+                    </script>
+                {% endif %}
+                <p id="question-text">{{ question['question'] }}</p>
+
+                <input type="radio" id="optionA" name="answer" value="A" required> 
+                <span class="option-text">{{ question['options']['A'] }}</span><br>
+
+                <input type="radio" id="optionB" name="answer" value="B"> 
+                <span class="option-text">{{ question['options']['B'] }}</span><br>
+
+                <input type="radio" id="optionC" name="answer" value="C"> 
+                <span class="option-text">{{ question['options']['C'] }}</span><br>
+
+                <input type="radio" id="optionD" name="answer" value="D"> 
+                <span class="option-text">{{ question['options']['D'] }}</span><br>
+                
+                {% if current_index < total_questions - 1 %}
+                    <button type="submit" name="action" value="next" class="btn">Next</button>
+                {% else %}
+                    <button type="submit" name="action" value="submit" class="btn">Submit</button>
+                {% endif %}
+            </form>
+
+            <button onclick="readQuestionAndOptions()" class="btn">🔊 Read Question & Options</button>
+            <a href="{{ url_for('student_dashboard') }}" class="btn">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        // Existing JavaScript code for speech recognition and reading questions
+        let recognition; // Declare a global variable to track the speech recognition instance
+    
+        function readText(text) {
+            const audio = new Audio(`/speak/${encodeURIComponent(text)}`);
+            return new Promise(resolve => {
+                audio.onended = resolve;
+                audio.play();
+            });
+        }
+    
+        async function readQuestionAndOptions() {
+            if (recognition) {
+                recognition.abort(); // Stop any ongoing speech recognition
+            }
+    
+            let questionNumber = document.getElementById("question-number").innerText;
+            let question = document.getElementById("question-text").innerText;
+            let options = document.querySelectorAll(".option-text");
+    
+            await readText("Question " + questionNumber);
+            await readText("Question: " + question);
+    
+            for (let i = 0; i < options.length; i++) {
+                let optionText = String.fromCharCode(65 + i) + ": " + options[i].innerText;
+                await readText(optionText);
+            }
+    
+            await readText("Kindly provide your answer.");
+            startListening();
+        }
+    
+        // ... (rest of the existing JavaScript code)
+        
+        window.onload = function() {
+            readQuestionAndOptions();
+        };
+    </script>
+</body>
+</html>

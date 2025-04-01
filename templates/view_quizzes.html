@@ -3,19 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Quizzes - VivaQuizApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>View Quizzes</title>
 </head>
 <body>
-    <h1>Quizzes</h1>
-    <ul>
-        {% for quiz in quizzes %}
-            <li>
-                Quiz ID: {{ quiz.quiz_id }}
-                <a href="{{ url_for('quiz', quiz_id=quiz.quiz_id) }}">View Quiz</a>
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('teacher_dashboard') }}">Back to Dashboard</a>
+    <div class="background-box">
+        <div class="container">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <div class="branding">VivaQuizApp</div>
+                <h2>Quizzes</h2>
+                
+                <ul class="quiz-list">
+                    {% for quiz in quizzes %}
+                        <li>
+                            <span>Quiz ID: {{ quiz.quiz_id }}</span>
+                            <a href="{{ url_for('teacher_quiz_view', quiz_id=quiz.quiz_id) }}" class="btn signup-btn">View Quiz</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            
+                <button class="btn login-btn" onclick="window.location.href='{{ url_for('teacher_dashboard') }}'">
+                    Back to Dashboard
+                </button>
+            </div>
+            
+
+            <!-- Right Panel (Same as teacher_dashboard.html) -->
+            <div class="right-panel"></div>
+        </div>
+    </div>
 </body>
 </html>

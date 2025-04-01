@@ -1,43 +1,346 @@
+/* General Styling and Login*/
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 20px;
-    background-color: #f4f4f4;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #BCAD9E, #EDECE6); /* Ash-like gradient */
+}
+h2, h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100; /* Bold headings */
 }
 
-h1 {
-    color: #333;
+p, input {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200; /* Regular for normal text */
 }
 
-form {
-    margin-bottom: 20px;
-}
+.branding {
 
-input, select, textarea {
-    display: block;
-    margin: 10px 0;
-    padding: 10px;
-    width: 100%;
-    max-width: 400px;
+    font-family: 'Poppins', sans-serif;
 }
 
 button {
-    padding: 10px 15px;
-    background-color: #5cb85c;
-    color: white;
+    font-weight: 200; /* Slightly bolder buttons */
+}
+
+/* Background Box */
+.background-box {
+    width: 99%;
+    max-width: 99%;
+    height: 99vh;
+    background: linear-gradient(135deg, #E7E1C0, #ECECE9); /* Light caramel gradient */
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Container */
+.container {
+    display: flex;
+    width: 90%;
+    height: 98%;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    background: transparent; /* Make it blend with the background */
+}
+
+/* Left Panel Content (without background box) */
+.left-panel {
+    flex: 1;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    background: transparent; /* Remove the background */
+}
+
+.branding {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 20px;
+    background: transparent;
+    padding: 5px 15px;
+    border-radius: 15px;
+}
+
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+    max-width:80%;
+}
+
+/* Buttons */
+.btn {
+    margin-top:30px;
+    width: 200px;
+    padding: 12px;
+    border-radius: 25px;
     border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.signup-btn {
+    background: #ffd700;
+    color: black;
+    
+}
+
+.signup-btn:hover {
+    background: #ffcc00;
+}
+
+.login-btn {
+    background: white;
+    border: 2px solid #ffd700;
+    color: #333;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    background: #ffd700;
+    color: black;
+}
+
+.small-text {
+    font-size: 12px;
+    margin-top: 20px;
+    
+}
+
+.small-text a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.small-text a:hover {
+    text-decoration: underline;
+}
+
+
+.right-panel {
+    flex: 1;  /* Increase width */
+    background: url("https://imgs.search.brave.com/Uup26J925pQkrlpB2XGeSEkKQUiqX_oY2fInUwN4w44/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jNC53/YWxscGFwZXJmbGFy/ZS5jb20vd2FsbHBh/cGVyLzUyNy85NzYv/MzUvZXhhbS1zdHVk/eWluZy13YWxscGFw/ZXItcHJldmlldy5q/cGc") no-repeat center center/cover;
+    border-left: 2px solid rgba(0, 0, 0, 0.1); /* Subtle partition */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 10%;
+    border-radius: 30px; /* Curved edges */
+    overflow: hidden; /* Ensure the image follows the curve */
+}
+
+/*Signin and login*/
+
+/* Form Styling */
+.input-container {
+    display: flex;
+    flex-direction: column; /* Ensures label stays above input */
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+.input-container label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: #333;
+    font-weight: 100;
+    margin-bottom: 3px; /* Adds space between label and input */
+    align-self: flex-start;
+}
+
+/* Input Box Styling */
+.input-container input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border-radius: 40px;
+    border: 2px solid #f6e379;;
+    background: #fff;
+    outline: none;
+    transition: border 0.3s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus Effect: Moves Label & Highlights Input */
+.input-container input:focus {
+    border: 2px solid #ffd700;
+    background: #fff;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+    top: 10px;
+    font-size: 12px;
+    color: #555;
+}
+
+.loginh{
+    margin-bottom: 40px;
+    margin-top: 60px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers all inputs and labels */
+    justify-content: center;
+    width: 100%;
+}
+
+/* Ensure the dropdown styling applies only to <select> */
+.input-container select {
+    width: 100%;
+    padding: 13px 15px;
+    font-size: 16px;
+    border-radius: 40px;
+    border: 2px solid #f6e379;
+    background: #fff;
+    outline: none;
+    transition: border 0.3s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    appearance: none; /* Removes default browser styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #4cae4c;
+/* Focus Effect */
+.input-container select:focus {
+    border: 2px solid #ffd700;
+    background: #fff;
 }
 
-a {
-    color: #007bff;
-    text-decoration: none;
+/* Dropdown Arrow - Apply ONLY to Select Fields */
+.input-container.dropdown {
+    position: relative;
 }
 
-a:hover {
-    text-decoration: underline;
+.input-container.dropdown::after {
+    content: "▼";
+    font-size: 14px;
+    color: #333;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    pointer-events: none;
 }
+
+/* Ensuring dropdown text alignment */
+.input-container select option {
+    font-size: 16px;
+    padding: 10px;
+}
+
+.greeting-text {
+    font-size: 18px;
+    color: #333;
+    display: inline-flex;
+    align-items: center;
+    gap: 15px; /* Adds small spacing */
+    white-space: nowrap;
+    margin-left: -140px;
+}
+
+
+/*View_Quizzes*/
+
+/* Enable scrolling for the quiz list */
+.left-panel {
+    overflow: hidden; /* Prevents double scrolling */
+    max-height: 100vh;
+    padding-right: 10px; /* Space for scrollbar */
+}
+
+/* Fix alignment of Quiz ID boxes */
+.quiz-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    max-width: 400px;
+    max-height: 80vh; /* Limit height to allow scrolling */
+    overflow-y: auto; /* Enable scrolling */
+    padding-right: 5px; /* Prevents content cut-off due to scrollbar */
+}
+
+/* Scrollbar Styling */
+.quiz-list::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.quiz-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #f6d365, #fda085); /* Gradient effect */
+    border-radius: 10px; /* Rounded corners */
+}
+
+.quiz-list::-webkit-scrollbar-track {
+    background: #f8f8f8; /* Light background */
+    border-radius: 10px;
+}
+
+/* Hover effect on scrollbar */
+.quiz-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #fda085, #f6d365); /* Reverse gradient on hover */
+}
+
+/* Firefox Scrollbar */
+.quiz-list {
+    scrollbar-width: thin; /* Makes scrollbar thinner */
+    scrollbar-color: #f6d365 #f8f8f8; /* Thumb and track color */
+}
+
+/* Fix alignment of list items */
+.quiz-list li {
+    background: #f8f8f8;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #f6e379;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/* Ensure the text is properly aligned */
+.quiz-list li span {
+    font-size: 16px;
+    font-weight: 500;
+    flex-grow: 1; /* Expands to take available space */
+    padding-left: 10px; /* Adds spacing from the left */
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+/* Fix button alignment */
+.quiz-list li .btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    margin-left: auto; /* Ensures button stays on the right */
+}
+
+

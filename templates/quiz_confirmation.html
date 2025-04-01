@@ -3,12 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Confirmation</title>
+    <title>Quiz Confirmation - VivaQuizApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Quiz Created Successfully!</h1>
-    <p>Your quiz has been created with the following ID:</p>
-    <h2>{{ quiz_id }}</h2>
-    <a href="{{ url_for('teacher_dashboard') }}">Back to Dashboard</a>
+    <div class="background-box">
+        <div class="container">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <div class="branding">VivaQuizApp</div>
+
+                <!-- Quiz Confirmation Content -->
+                <div id="confirmationContent" style="display: flex; flex-direction: column; align-items: center;">
+                    <h2>Quiz Created Successfully!</h2>
+                    <p>Your quiz has been created with the following ID:</p>
+                    <h2 class="quiz-id">{{ quiz_id }}</h2>
+                    
+                    <!-- Copy Quiz ID Button -->
+                    <button class="btn signup-btn" onclick="copyQuizID()">Copy Quiz ID</button>
+                    
+                    <button class="btn login-btn" onclick="window.location.href='{{ url_for('teacher_dashboard') }}'">Back to Dashboard</button>
+                </div>
+            </div>
+
+            <!-- Right Panel (Image Background) -->
+            <div class="right-panel"></div>
+        </div>
+    </div>
+
+    <script>
+        function copyQuizID() {
+            const quizIDText = document.querySelector(".quiz-id").innerText;
+            navigator.clipboard.writeText(quizIDText).then(() => {
+                alert("Quiz ID copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy: ", err);
+            });
+        }
+    </script>
 </body>
 </html>

@@ -3,12 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Viva Quiz App</title>
+
+    
 </head>
 <body>
-    <h1>Welcome to the Viva Quiz App</h1>
-    <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('signup') }}">Sign Up</a>
+    <!-- Full-Page Background Box -->
+    <div class="background-box">
+        <div class="container">
+            <!-- Left Section -->
+            <div class="left-panel">
+                <div class="branding">VivaQuizApp</div>
+                <h2>Welcome to VivaQuizApp</h2>
+                <p>Sign up to experience interactive voice-based quizzes and enhance your learning with real-time responses!</p>
+                <div class="buttons">
+                    <a href="{{ url_for('signup') }}" class="btn signup-btn">Sign Up</a>
+                    <a href="{{ url_for('login') }}" class="btn login-btn">Login</a>
+                </div>
+                <p class="small-text">Have an account? <a href="{{ url_for('login') }}">Sign in</a></p>
+            </div>
+
+            <!-- Right Section -->
+            <div class="right-panel"></div>
+        </div>
+    </div>
 </body>
 </html>

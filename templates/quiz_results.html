@@ -3,21 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Quiz Results</title>
+    <style>
+        .right-panel {
+            flex: 2;
+            overflow-y: auto;
+            border: 2px solid #f6e379;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #E7E1C0, #ECECE9);
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+        }
+
+        /* Question Block Styling */
+        .question-block {
+            width: 60%;
+            max-width: 850px; /* Allows wider expansion */
+            background: linear-gradient(135deg, #E7E1C0, #ECECE9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 170px; /* Increased margin to prevent overlap */
+            min-height: 300px; /* Adjusted height if necessary */
+            position: relative;
+        }
+
+        /* Question Heading */
+        .question-heading {
+            font-size: 24px; /* Adjust size as needed */
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            margin: 10px 0; /* Space around the heading */
+        }
+
+        /* Question Text */
+        .question-text {
+            font-size: 20px; /* Adjust size as needed */
+            font-family: 'Poppins', sans-serif;
+            margin: 10px 0; /* Space around the question */
+            text-align: center; /* Center the text */
+            margin-left: 50px;
+        }
+
+        /* Options */
+        .option-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            width:85%;
+        }
+
+        .option-label {
+            font-weight: 600;
+            font-size: 18px;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            width: 25px; /* Ensures consistent spacing */
+            text-align: center;
+        }
+
+        .option-text {
+            flex: 1; /* Expands to fill space */
+            padding: 8px; /* Reduced padding for smaller height */
+            font-size: 14px; /* Reduced font size */
+            font-family: 'Poppins', sans-serif;
+            border-radius: 30px;
+            border: 2px solid #f6e379;
+            outline: none;
+            background-color: #ffffff;
+            text-align: center;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        /* User's Answer and Correct Answer */
+        .user-answer {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px; /* Adjust size as needed */
+            text-align: center; /* Center the text */
+        }
+
+        .correct-text {
+            color: green;
+            font-weight: bold;
+        }
+
+        .incorrect-text {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Custom Scrollbar */
+        .right-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+        .right-panel::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+        .right-panel::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 10px;
+        }
+        .right-panel::-webkit-scrollbar-thumb:hover {
+            background: #f6e379;
+        }
+    </style>
 </head>
 <body>
-    <h1>Quiz Results</h1>
-    <h2>Your Score: {{ total_points }} / {{ questions|length }}</h2>
-    <h2>Your Answers:</h2>
-    <ul>
-        {% for question in questions %}
-            <li>
-                <strong>{{ question.question }}</strong><br>
-                Your Answer: {{ user_answers[loop.index0] }} - Correct Answer: {{ question.correct_answer }}
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('student_dashboard') }}">Return to Dashboard</a>
+    <div class="background-box">
+        <div class="container">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <div class="branding">VivaQuizApp</div>
+                <h2>Quiz Results</h2> <!-- Added Quiz Results heading -->
+                <h2>Your Score: {{ total_points }} / {{ questions|length }}</h2>
+                <button class="btn login-btn" onclick="window.location.href='{{ url_for('student_dashboard') }}'">Return to Dashboard</button>
+            </div>
+
+            <!-- Right Panel (Scrollable) -->
+            <div class="right-panel">
+                {% for question in questions %}
+                    <div class="question-block">
+                        <h3 class="question-heading">Question {{ loop.index }}</h3>
+                        <p class="question-text">{{ question.question }}</p>
+                        <ul>
+                            {% for key, option in question.options.items() %}
+                            <li class="option-container">
+                                <span class="option-label">{{ key.upper() }}.</span>
+                                <span class="option-text">{{ option }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <p class="user-answer">
+                            Correct Answer: {{ question.correct_answer }}<br>
+                            Your Answer: {{ user_answers[loop.index0] }}<br>
+                        
+                            {% if question.correct_answer == user_answers[loop.index0] %}
+                                <span class="correct-text">Correct</span>
+                            {% else %}
+                                <span class="incorrect-text">Wrong Answer</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </body>
 </html>

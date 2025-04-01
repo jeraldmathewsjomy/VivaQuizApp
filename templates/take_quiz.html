@@ -3,16 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Take Quiz</title>
 </head>
 <body>
-    <h1>Take Quiz</h1>
-    <form method="POST">
-        <label for="quiz_id">Enter Quiz ID:</label>
-        <input type="text" id="quiz_id" name="quiz_id" required>
-        <button type="submit">Start Quiz</button>
-    </form>
-    <a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a>
+    <div class="background-box">
+        <div class="container">
+            <div class="left-panel">
+                <div class="branding">VivaQuizApp</div>
+                <h2 style="margin-bottom: 70px;">Take Quiz</h2> <!-- Added margin for spacing -->
+                <form method="POST">
+                    <div class="input-container">
+                        <label for="quiz_id">Enter Quiz ID:</label>
+                        <input type="text" id="quiz_id" name="quiz_id" required>
+                    </div>
+                    <button class="btn signup-btn" type="submit">Start Quiz</button>
+                </form>
+                <p class="small-text"><a href="{{ url_for('student_dashboard') }}">Back to Dashboard</a></p> <!-- Wrapped in <p> tag -->
+            </div>
+            <div class="right-panel"></div>
+        </div>
+    </div>
 </body>
 </html>

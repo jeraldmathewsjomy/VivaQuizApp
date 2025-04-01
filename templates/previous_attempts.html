@@ -3,19 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Previous Quiz Attempts</title>
+
+    <style>
+        .right-panel {
+            
+            background: none;
+            border-left: none; /* Subtle partition */
+            
+        }
+    </style>
 </head>
 <body>
-    <h1>Previous Quiz Attempts</h1>
-    <ul>
-        {% for attempt in attempts %}
-            <li>
-                Quiz ID: {{ attempt.quiz_id }} - Score: {{ attempt.total_points }}
-                <a href="{{ url_for('quiz_result', attempt_id=attempt.id) }}">View Result</a>
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('student_dashboard') }}">Return to Dashboard</a>
+    <div class="background-box">
+        <div class="container">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <div class="branding">VivaQuizApp</div>
+                <h2>Previous Quiz Attempts</h2>
+                <button class="btn login-btn" onclick="window.location.href='{{ url_for('student_dashboard') }}'">Return to Dashboard</button>
+            </div>
+
+            <!-- Right Panel (Scrollable) -->
+            <div class="right-panel">
+                <ul class="quiz-list">
+                    {% for attempt in attempts %}
+                        <li>
+                            Quiz ID: {{ attempt.quiz_id }}  Score: {{ attempt.total_points }}
+                            <a href="{{ url_for('quiz_result', attempt_id=attempt.id) }}" class="btn signup-btn">View Result</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

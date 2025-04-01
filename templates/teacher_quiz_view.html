@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Quiz - VivaQuizApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* Right Panel - Scrollable */
+        .right-panel {
+            flex: 2;
+            overflow-y: auto;
+            border: 2px solid #f6e379;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #E7E1C0, #ECECE9);
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+        }
+        
+        /* Custom Scrollbar */
+        .right-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+        .right-panel::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+        .right-panel::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 10px;
+        }
+        .right-panel::-webkit-scrollbar-thumb:hover {
+            background: #f6e379;
+        }
+        
+        /* Question Block Styling */
+        .question-block {
+            width: 100%;
+            max-width: 850px; /* Allows wider expansion */
+            background: linear-gradient(135deg, #E7E1C0, #ECECE9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            min-height: 150px;
+            position: relative;
+        }
+        
+        /* Fix: Ensure First Question is Visible */
+        .question-block:first-child {
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+
+        .question-block p {
+            font-size: 20px; /* Increase font size */
+             /* Make it bold */
+            text-align: center; /* Center the text */
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+            margin-left:30px;
+        }
+        
+        /* Input Fields */
+        /* Input Fields - Wider Textboxes */
+        .input-field {
+            width: 100%;  /* Ensures full width inside parent */
+            max-width: 800px; /* Expands but keeps a limit */
+            padding: 14px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 30px;
+            border: 2px solid #f6e379;
+            outline: none;
+            background-color: #ffffff;
+            text-align: center;
+            display: block;
+            margin: 10px auto; /* Centers the textboxes */
+            box-sizing: border-box;
+        }
+        
+        
+        /* Ensure First Input Field is Visible */
+        .input-field:first-child {
+            margin-top: 10px;
+        }
+        
+        /* Disabled Input Fields */
+        .input-field[disabled] {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+        
+        /* Scroll Fix - Ensure Visibility */
+        .right-panel {
+            scroll-padding-top: 20px; /* Ensures smooth scrolling */
+        }
+
+        /* Remove Default List Styling */
+        /* Remove Bullet Points */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        /* Option Container - Align Items Horizontally */
+        .option-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        /* Custom Radio Button */
+        .option-container input[type="radio"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #f6e379;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        /* Checked State */
+        .option-container input[type="radio"]:checked {
+            background-color: #ffd700;
+            border: 5px solid #ffffff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* ABCD Label */
+        .option-label {
+            font-weight: 600;
+            font-size: 18px;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            width: 25px; /* Ensures consistent spacing */
+            text-align: center;
+        }
+        
+        /* Option Textbox */
+        .option-text {
+            flex: 1; /* Expands to fill space */
+            padding: 12px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 30px;
+            border: 2px solid #f6e379;
+            outline: none;
+            background-color: #ffffff;
+            text-align: center;
+            display: block;
+            box-sizing: border-box;
+        }
+            
+        
+
+    </style>
+</head>
+<body>
+    <div class="background-box">
+        <div class="container">
+            <!-- Left Panel (Quiz ID and Details) -->
+            <!-- Left Panel (Quiz ID and Details) -->
+            <div class="left-panel">
+                <div class="branding">VivaQuizApp</div>
+                <h2>Quiz Details</h2>
+                <p><strong>Quiz ID:</strong> {{ quiz.quiz_id }}</p>
+
+                <!-- Edit Button Moved to Left -->
+                <button type="button" class="btn" id="edit-btn">Edit</button>
+
+                <button class="btn" onclick="window.location.href='{{ url_for('view_quizzes') }}'">
+                    Back to Quizzes
+                </button>
+            </div>
+
+
+            <!-- Right Panel (Scrollable Quiz Content) -->
+            <div class="right-panel">
+                <form method="POST" id="edit-quiz-form">
+                    {% for index, question in enumerate(questions) %}
+                        <div class="question-block">
+                            <p>Question {{ index + 1 }}</p>
+                            <input type="text" name="question_{{ index }}" value="{{ question['question'] }}" class="input-field" disabled>
+                
+                            <ul>
+                                {% for key, option in question['options'].items() %}
+                                    <li class="option-container">
+                                        <input type="radio" name="correct_answer_{{ index }}" value="{{ key }}"
+                                            {% if question['correct_answer'] == key %}checked{% endif %} disabled>
+                                        <label class="option-label">{{ key.upper() }}.</label>
+                                        <input type="text" name="option_{{ key }}_{{ index }}" value="{{ option }}" class="option-text" disabled>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            
+                        </div>
+                    {% endfor %}
+                
+                    <button type="submit" class="btn" id="save-btn" style="display: none;">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("edit-btn").addEventListener("click", function () {
+            // Enable all text input fields
+            let textInputs = document.querySelectorAll(".input-field, .option-text");
+            textInputs.forEach(input => input.removeAttribute("disabled"));
+        
+            // Enable radio buttons
+            let radioButtons = document.querySelectorAll(".option-container input[type='radio']");
+            radioButtons.forEach(radio => radio.removeAttribute("disabled"));
+        
+            // Show Save button & Hide Edit button
+            document.getElementById("save-btn").style.display = "inline";
+            this.style.display = "none";
+        });
+        
+    </script>
+</body>
+</html>

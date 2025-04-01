@@ -170,6 +170,45 @@ def view_quizzes():
     quizzes = Quiz.query.all()
     return render_template('view_quizzes.html', quizzes=quizzes)
 
+@app.route('/teacher_quiz_view/<quiz_id>', methods=['GET', 'POST'])
+@login_required
+def teacher_quiz_view(quiz_id):
+    if current_user.role != 'teacher':
+        return "Unauthorized", 403
+
+    quiz = Quiz.query.filter_by(quiz_id=quiz_id).first()
+    if not quiz:
+        return "Quiz not found", 404
+
+    # Load questions from JSON
+    questions = json.loads(quiz.questions)
+
+    if request.method == 'POST':
+        try:
+            print("Received Form Data:", request.form)  # Debugging Step
+
+            # Update each question
+            for i in range(len(questions)):
+                questions[i]['question'] = request.form.get(f'question_{i}', questions[i]['question'])
+                
+                for key in questions[i]['options'].keys():
+                    questions[i]['options'][key] = request.form.get(f'option_{key}_{i}', questions[i]['options'][key])
+                
+                questions[i]['correct_answer'] = request.form.get(f'correct_answer_{i}', questions[i]['correct_answer'])
+
+            quiz.questions = json.dumps(questions)  # Convert updated questions to JSON
+            db.session.commit()
+            flash("Quiz updated successfully!", "success")
+            print("Updated Quiz:", quiz.questions)  # Debugging Step
+
+        except Exception as e:
+            flash("Error updating quiz: " + str(e), "error")
+            print("Error:", e)  # Debugging Step
+
+    return render_template('teacher_quiz_view.html', quiz=quiz, questions=questions, enumerate=enumerate)
+
+
+
 @app.route("/speak/<text>")
 def speak(text):
     try:
